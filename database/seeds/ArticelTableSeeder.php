@@ -13,7 +13,7 @@ class ArticelTableSeeder extends Seeder
     {
         $data = [
             [
-                'cate_id' => 'PHP',
+                'cate_id' => 1,
                 'title' => 'hello,world!欢迎来到小北博客',
                 'content' => 'hello,world!欢迎来到小北博客',
                 'md_content' => 'hello,world!欢迎来到小北博客',
@@ -21,7 +21,7 @@ class ArticelTableSeeder extends Seeder
                 'keywords' => 'laravel,小北博客',
                 'desc' => 'hello,world!欢迎来到小北博客',
                 'cover' => '/uploads/articles/20181208/5c0bc1c96e7d9.png',
-                'click' => '999',
+                'click' => '0',
                 'is_show' => '1',
                 'top_at' => date('Y-m-d H:i:s'),
                 'created_at' => date('Y-m-d H:i:s'),
