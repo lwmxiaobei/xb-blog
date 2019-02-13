@@ -18,6 +18,6 @@ class UserRolesTableSeeder extends Seeder
             ]
         ];
 
-        DB::table('admin_role')->insert($data);
+        DB::table('admin_user_role')->insert($data);
     }
 }

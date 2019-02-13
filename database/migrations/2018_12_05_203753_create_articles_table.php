@@ -17,7 +17,6 @@ class CreateArticlesTable extends Migration
             Schema::create('articles', function (Blueprint $table) {
                 $table->increments('id');
                 $table->integer('cate_id')->unsigned()->comment('分类ID');
-                $table->integer('user_id')->unsigned()->comment('作者ID');
                 $table->string('title', 50)->comment('文章标题');
                 $table->text('content')->comment('内容');
                 $table->text('md_content')->comment('markdown内容');
@@ -27,8 +26,8 @@ class CreateArticlesTable extends Migration
                 $table->string('cover', 100)->comment('封面图');
                 $table->integer('click')->unsigned()->comment('浏览量');
                 $table->tinyInteger('is_show')->unsigned()->comment('是否显示')->default(0);
-                $table->dateTime('top_at');
-                $table->dateTime('deleted_at');
+                $table->dateTime('top_at')->nullable();
+                $table->dateTime('deleted_at')->nullable();
                 $table->dateTime('created_at');
                 $table->dateTime('updated_at');
             });

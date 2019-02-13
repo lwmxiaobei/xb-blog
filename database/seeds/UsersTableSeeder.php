@@ -13,11 +13,11 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'avatar' => '',
+                'avatar' => '/uploads/avatar/20190213/5c640e7cf2e22.jpg',
                 'password' => password_hash('admin', PASSWORD_DEFAULT),
                 'account' => 'admin',
                 'nickname' => 'admin',
-                'clear_password'  => 'admin',
+                'clear_password'  => 'admin'
             ]
         ];
 

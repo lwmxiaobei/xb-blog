@@ -15,7 +15,8 @@ class CreateAdminRolePermissionTable extends Migration
     {
         Schema::create('admin_role_permission', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('role_id')->unsigned()->comment('角色ID');
+            $table->integer('permission_id')->unsigned()->comment('权限ID');
         });
     }
 

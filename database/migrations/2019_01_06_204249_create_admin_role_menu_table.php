@@ -15,7 +15,8 @@ class CreateAdminRoleMenuTable extends Migration
     {
         Schema::create('admin_role_menu', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->integer('role_id')->unsigned()->comment('角色ID');
+            $table->integer('menu_id')->unsigned()->comment('菜单ID');
         });
     }
 

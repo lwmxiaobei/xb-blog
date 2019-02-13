@@ -15,7 +15,10 @@ class CreateAdminPermissionTable extends Migration
     {
         Schema::create('admin_permission', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            $table->string('name', 50)->comment('权限名称');
+            $table->string('route', 1000)->comment('路由名称');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
         });
     }
 
