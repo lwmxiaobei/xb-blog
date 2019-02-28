@@ -47,7 +47,8 @@
                                 </div>
                                 <div class="form-group" id="string">
                                     <label >* 关键字</label>
-                                    <input type="text" name="keyword" value="{{ $detail->keyword }}" class="form-control value-input required"
+                                    <input type="text" name="keyword" value="{{ $detail->keywords }}"
+                                           class="form-control value-input required"
                                            placeholder="关键字">
                                 </div>
                                 <div class="form-group " id="text">
