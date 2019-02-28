@@ -17,7 +17,7 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="/assets/images/favicon.png" />
 
-  <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+  <script src="/assets/js/jquery-3.3.1.min.js"></script>
   {{--datetimer--}}
   <link rel="stylesheet" id=cal_style type="text/css" href="/assets/datetimer/dist/flatpickr.min.css">
   <script src="/assets/datetimer/src/flatpickr.js"></script>

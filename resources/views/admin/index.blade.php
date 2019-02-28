@@ -252,7 +252,7 @@
   <!-- page-body-wrapper ends -->
 </div>
 <!-- container-scroller -->
-<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script src="/assets/js/jquery-3.3.1.min.js"></script>
 <script src="/layer/layer.js"></script>
 
 <script>
