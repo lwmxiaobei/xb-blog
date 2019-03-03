@@ -29,7 +29,7 @@ class StoreBlogPost extends FormRequest
             'cate_id' => 'required|min:1',
             'desc' => 'required|string|between:1,100',
             'tags' => 'required|min:1',
-            'keyword' => 'required|string|between:1,50',
+            'keywords' => 'required|string|between:1,50',
         ];
     }
 
@@ -50,8 +50,8 @@ class StoreBlogPost extends FormRequest
             'desc.between' => '标题长度必须介于1-100之间',
             'tags.required' => '标签不能为空',
             'tags.min' => '标签ID错误',
-            'keyword.required' => '关键字不能为空',
-            'keyword.between' => '关键字长度必须介于1-50之间',
+            'keywords.required' => '关键字不能为空',
+            'keywords.between' => '关键字长度必须介于1-50之间',
         ];
     }
 }

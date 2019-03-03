@@ -90,15 +90,15 @@
                 <div class="content">
                     <div class="col-md-4 col-md-offset-4">
                         <div class="link">
-                            <a href="">关于我</a>
-                            <a href="">友情链接</a>
+                            <a href="{{ route('about') }}">关于我</a>
+                            <a href="{{ route('link') }}">友情链接</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="copy-right text-center">
-                <span>© xiaobei lin 2016. All rights reserved. </span>
-                <a target="_blank" href="" class="item">粤ICP备16020344号-1</a>
+                <span>© xiaobei lin 2017 小北博客 All rights reserved. </span>
+                <span>闽ICP备17031629号-1<span>
             </div>
         </footer>
 

@@ -48,7 +48,8 @@ class ArticleController extends Controller
             return $this->json(200,'添加成功');
         }else{
             $tagsList = DB::table('tags')->get();
-            return view('admin.article_add',['tagsList' => $tagsList]);
+            $catesList = DB::table('cates')->get();
+            return view('admin.article_add',['tagsList' => $tagsList, 'catesList' => $catesList]);
         }
     }
 
@@ -151,7 +152,7 @@ class ArticleController extends Controller
             'cate_id' => 'required|min:1',
             'desc' => 'required|string|between:1,100',
             'tags.*' => 'numeric|exists:tags,id',
-            'keyword' => 'required|string|between:1,50',
+            'keywords' => 'required|string|between:1,50',
         ], [
             'title.required' => '标题字段不能为空',
             'title.between' => '标题长度必须介于1-50之间',
@@ -160,8 +161,8 @@ class ArticleController extends Controller
             'cate_id.min' => '分类ID错误',
             'desc.required' => '描述不能为空',
             'desc.between' => '标题长度必须介于1-100之间',
-            'keyword.required' => '关键字不能为空',
-            'keyword.between' => '关键字长度必须介于1-50之间',
+            'keywords.required' => '关键字不能为空',
+            'keywords.between' => '关键字长度必须介于1-50之间',
         ]);
     }
 }

@@ -18,13 +18,13 @@ class CreateArticlesTable extends Migration
                 $table->increments('id');
                 $table->integer('cate_id')->unsigned()->comment('分类ID');
                 $table->string('title', 50)->comment('文章标题');
-                $table->text('content')->comment('内容');
-                $table->text('md_content')->comment('markdown内容');
+                $table->text('content')->comment('内容')->default('');
+                $table->text('md_content')->comment('markdown内容')->default('');
                 $table->string('tags',10)->nullable()->comment('标签');
                 $table->string('keywords',50)->nullable()->comment('关键字');
                 $table->string('desc',100)->nullable()->comment('描述');
-                $table->string('cover', 100)->comment('封面图');
-                $table->integer('click')->unsigned()->comment('浏览量');
+                $table->string('cover', 100)->comment('封面图')->default('');
+                $table->integer('click')->unsigned()->comment('浏览量')->default(0);
                 $table->tinyInteger('is_show')->unsigned()->comment('是否显示')->default(0);
                 $table->dateTime('top_at')->nullable();
                 $table->dateTime('deleted_at')->nullable();
