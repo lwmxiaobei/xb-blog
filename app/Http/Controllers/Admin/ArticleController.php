@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBlogPost;
 use Illuminate\Http\Request;
+use Chenhua\MarkdownEditor\Facades\MarkdownEditor;
 use DB;
 use App\Models\Article;
 use Validator;
@@ -41,8 +42,9 @@ class ArticleController extends Controller
             $data['tags'] = implode(',', $data['tags']);
             $data['created_at'] = date("Y-m-d H:i:s");
             $data['updated_at'] = date("Y-m-d H:i:s");
-            $data['content'] = MarkdownEditor::parse($data['content']);
             $data['md_content'] = $data['content'];
+            $data['content'] = MarkdownEditor::parse($data['content']);
+
             $id = DB::table('articles')->insertGetId($data);
             if(!$id){
                 return $this->json(500,'添加失败');
@@ -70,6 +72,8 @@ class ArticleController extends Controller
             $data['tags'] = implode(',', $data['tags']);
             unset($data['id']);
             $data["updated_at"] = date("Y-m-d H:i:s");
+            $data['md_content'] = $data['content'];
+            $data['content'] = MarkdownEditor::parse($data['content']);
             $res = DB::table('articles')->where('id',$id)->update($data);
             if(!$res){
                 return $this->json(500,'修改失败');

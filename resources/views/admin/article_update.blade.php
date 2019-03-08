@@ -58,7 +58,7 @@
                                     {{--max-height:400px;overflow: hidden">{{ $detail->content }}</textarea >--}}
                                     <div id="editormd">
                                         <textarea placeholder="请在此处编辑内容" class="required" name="content" style="display:none;">
-                                            {{ $detail->content }}
+                                            {{ $detail->md_content }}
                                         </textarea>
                                     </div>
 
