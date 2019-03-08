@@ -23,10 +23,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-8">
                 <div class="article-detail">
                     {!!$detail->content !!}
                 </div>
+            </div>
+            <div class="col-md-4 slide">
+                <div class="widget rec-article" >
+                    <h4>推荐文章</h4>
+                    <div>
+                        @forelse ($topList as $item)
+                            <a href="{{ route('article',array('id'=>$item->id))  }}" class="rec-list">{{$item->title}}</a>
+                            @endforeach
+                    </div>
+                </div>
+                <div class="widget rec-article" >
+                    <h4>最近文章</h4>
+                    <div>
+                        @forelse ($recList as $item)
+                            <a href="{{ route('article',array('id'=>$item->id))  }}" class="rec-list">{{$item->title}}</a>
+                            @endforeach
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

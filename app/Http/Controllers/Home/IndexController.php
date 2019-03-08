@@ -51,8 +51,17 @@ class IndexController extends Controller
         $detail = Article::getDetail($id);
         //访问一次增加一次点击量
         DB::table('articles')->where('id',$id)->increment('click');
-
-        return view('home.article',['detail' => $detail]);
+        // 最近文章
+        $recList = DB::table('articles')->where('is_show',1)->orderBy('created_at','DESC')->limit(10)->get();
+        // 置顶文章
+        $topList = DB::table('articles')->where('is_show',1)->where('top_at','<>',null)->orderBy('top_at','DESC')
+            ->limit
+            (10)->get();
+        return view('home.article', [
+            'detail' => $detail,
+            'recList' => $recList,
+            'topList' => $topList,
+            ]);
     }
 
 

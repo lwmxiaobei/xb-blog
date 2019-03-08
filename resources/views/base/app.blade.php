@@ -101,6 +101,10 @@
                 <span>闽ICP备17031629号-1<span>
             </div>
         </footer>
+        <div id="wrapper">
+            <a href="javascript:void(0)" id="toTop" style="display: block;">
+            </a>
+        </div>
 
     </div>
 
@@ -108,3 +112,39 @@
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
+<script>
+(function(){
+var bp = document.createElement('script');
+var curProtocol = window.location.protocol.split(':')[0];
+if (curProtocol === 'https') {
+bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+}
+else {
+bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+}
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script>
+    $(function(){
+        //当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
+        $(function () {
+            $(window).scroll(function(){
+                if ($(window).scrollTop()>80){
+                    $("#toTop").fadeIn(1000);
+                }
+                else
+                {
+                    $("#toTop").fadeOut(1000);
+                }
+                console.log($(window).scrollTop())
+            });
+            //当点击跳转链接后，回到页面顶部位置
+            $("#toTop").click(function(){
+                $('body,html').animate({scrollTop:0},1000);
+                return false;
+            });
+        });
+    });
+</script>
