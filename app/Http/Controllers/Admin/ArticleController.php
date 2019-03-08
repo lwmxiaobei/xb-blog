@@ -41,6 +41,8 @@ class ArticleController extends Controller
             $data['tags'] = implode(',', $data['tags']);
             $data['created_at'] = date("Y-m-d H:i:s");
             $data['updated_at'] = date("Y-m-d H:i:s");
+            $data['content'] = MarkdownEditor::parse($data['content']);
+            $data['md_content'] = $data['content'];
             $id = DB::table('articles')->insertGetId($data);
             if(!$id){
                 return $this->json(500,'添加失败');

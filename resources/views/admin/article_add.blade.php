@@ -51,9 +51,14 @@
                                 </div>
                                 <div class="form-group " id="text">
                                     <label >* 内容</label>
-                                    <textarea  placeholder="请在此处编辑内容" class="required" name="content" id="editor"
-                                               style="height:400px;
-                                    max-height:400px;overflow: hidden"></textarea >
+                                    {{--<textarea  placeholder="请在此处编辑内容" class="required" name="content" id="editor"--}}
+                                               {{--style="height:400px;--}}
+                                    {{--max-height:400px;overflow: hidden"></textarea >--}}
+                                    <div id="editormd">
+                                    <textarea placeholder="请在此处编辑内容" class="required" name="content" style="display:none;"></textarea>
+                                     </div>
+
+                                @include('markdown::encode',['editors'=>['editormd']])
                                 </div>
                                 <div class="form-group" id="image">
                                     <label>* 封面图</label>
