@@ -10,6 +10,7 @@
     <meta name="author" content="小北" />
     <meta name="description" content="{{ getConfig('description') }}" />
     <meta name="keywords" content="{{ getConfig('keywords') }}" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" id="page_favionc">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
