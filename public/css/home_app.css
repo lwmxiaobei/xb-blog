@@ -4629,13 +4629,22 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 }
 
 .article-detail{
-    color: #636b6f;
+    color: #333;
     margin-top: 30px;
     background: #fff;
-    padding: 0 20px;
+    padding: 20px;
     overflow: hidden;
     line-height: 2;
     word-wrap: break-word;
+}
+
+.article-detail .copyright{
+    margin-top: 30px;
+    color: #ee542a;
+}
+
+.article-detail img {
+    max-width: 100%;
 }
 
 .slide{

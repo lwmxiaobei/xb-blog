@@ -22,9 +22,9 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword4">* 分类</label>
                                     <select class="form-control required" id="cate_id" name="cate_id">
-                                        <option value="1">PHP</option>
-                                        <option value="2">Mysql</option>
-                                        <option value="3">GO</option>
+                                        @foreach($catesList as $k=>$v)
+                                            <option value="{{$v->id}}">{{ $v->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">

@@ -97,19 +97,19 @@
                 </div>
             </div>
             <div class="copy-right text-center">
-                <span>© xiaobei lin 2017 小北博客 All rights reserved. </span>
+                <span>© xiaobei lin 2017 <a href="{{config('app.url')}}">小北博客</a> All rights reserved. </span>
                 <span>闽ICP备17031629号-1<span>
             </div>
         </footer>
         <div id="wrapper">
-            <a href="javascript:void(0)" id="toTop" style="display: block;">
+            <a href="javascript:void(0)" id="toTop" style="display: none;">
             </a>
         </div>
 
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></a>
 </body>
 </html>
 <script>

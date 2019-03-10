@@ -26,6 +26,7 @@
             <div class="col-md-8">
                 <div class="article-detail">
                     {!!$detail->content !!}
+                    <p class="copyright">本文为小北博客原创, 欢迎转载, 但请附上来源 <a href="{{config('app.url')}}">小北博客</a></p>
                 </div>
             </div>
             <div class="col-md-4 slide">

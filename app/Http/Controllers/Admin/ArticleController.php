@@ -44,7 +44,6 @@ class ArticleController extends Controller
             $data['updated_at'] = date("Y-m-d H:i:s");
             $data['md_content'] = $data['content'];
             $data['content'] = MarkdownEditor::parse($data['content']);
-
             $id = DB::table('articles')->insertGetId($data);
             if(!$id){
                 return $this->json(500,'添加失败');
@@ -83,7 +82,9 @@ class ArticleController extends Controller
             $detail = Article::getOne($id);
             $detail->tags = explode(',', $detail->tags);
             $tagsList = DB::table('tags')->get();
-            return view('admin.article_update',['detail'=>$detail, 'tagsList' => $tagsList]);
+            $catesList = DB::table('cates')->get();
+            return view('admin.article_update',['detail'=>$detail, 'catesList' => $catesList, 'tagsList' =>
+                $tagsList]);
         }
     }
 

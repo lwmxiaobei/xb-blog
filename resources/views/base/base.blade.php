@@ -10,7 +10,7 @@
   <!-- plugins:css -->
   <link rel="stylesheet" href="/assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
-  <link rel="stylesheet" type="text/css" href="/assets/wangEditor/dist/css/wangEditor.min.css">
+  {{--<link rel="stylesheet" type="text/css" href="/assets/wangEditor/dist/css/wangEditor.min.css">--}}
   <!-- endinject -->
   <!-- inject:css -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -50,7 +50,7 @@
 </head>
 <body>
 <script src="/layer/layer.js"></script>
-<script src="/assets/wangEditor/dist/js/wangEditor.min.js"></script>
+{{--<script src="/assets/wangEditor/dist/js/wangEditor.min.js"></script>--}}
 @yield('base')
   <!-- plugins:js -->
   <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
