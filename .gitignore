@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/uploads
+/public/vendor
 /storage/*.key
 /vendor
 /.idea
@@ -13,3 +14,5 @@ yarn-error.log
 .env
 composer.json
 composer.lock
+/config/markdowneditor.php
+/resources/views/vendor

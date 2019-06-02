@@ -1,7 +1,7 @@
 {
-    "name": "woann/yamecent-admin",
-    "description": "yamecent-admin",
-    "keywords": ["framework", "yamecent-admin"],
+    "name": "linxiaobei/xiaobei-blog",
+    "description": "xiaobei-blog",
+    "keywords": ["framework", "xiaobei-blog"],
     "license": "MIT",
     "type": "project",
     "require": {
