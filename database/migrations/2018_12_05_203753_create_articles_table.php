@@ -18,8 +18,8 @@ class CreateArticlesTable extends Migration
                 $table->increments('id');
                 $table->integer('cate_id')->unsigned()->comment('分类ID');
                 $table->string('title', 50)->comment('文章标题');
-                $table->text('content')->comment('内容')->default('');
-                $table->text('md_content')->comment('markdown内容')->default('');
+                $table->text('content')->comment('内容');
+                $table->text('md_content')->comment('markdown内容');
                 $table->string('tags',10)->nullable()->comment('标签');
                 $table->string('keywords',50)->nullable()->comment('关键字');
                 $table->string('desc',100)->nullable()->comment('描述');
