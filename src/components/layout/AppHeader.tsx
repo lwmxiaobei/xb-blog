@@ -3,33 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { SignInButton, UserButton, useUser } from '@clerk/nextjs'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/browse', label: 'Browse' },
   { href: '/share', label: 'Share a Pet' },
 ]
-
-function AuthButtons({ compact = false }: { compact?: boolean }) {
-  const { isSignedIn } = useUser()
-
-  if (isSignedIn) {
-    return <UserButton />
-  }
-
-  return (
-    <SignInButton mode="modal">
-      <button
-        className={`text-sm font-medium rounded-full border border-crail text-crail hover:bg-crail hover:text-white transition-colors ${
-          compact ? 'px-3 py-1' : 'px-4 py-1.5'
-        }`}
-      >
-        Sign in
-      </button>
-    </SignInButton>
-  )
-}
 
 export default function AppHeader() {
   const pathname = usePathname()
@@ -60,12 +40,34 @@ export default function AppHeader() {
               {link.label}
             </Link>
           ))}
-          <AuthButtons />
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium px-4 py-1.5 rounded-full border border-crail text-crail hover:bg-crail hover:text-white transition-colors">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </nav>
 
         {/* Mobile right: auth + hamburger */}
         <div className="sm:hidden flex items-center gap-3">
-          <AuthButtons compact />
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium px-3 py-1 rounded-full border border-crail text-crail hover:bg-crail hover:text-white transition-colors">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+
           <button
             className="p-2 rounded text-gray-600 hover:text-crail"
             onClick={() => setOpen(!open)}
