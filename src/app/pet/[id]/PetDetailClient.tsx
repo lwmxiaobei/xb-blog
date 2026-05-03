@@ -14,6 +14,17 @@ interface Props {
 
 type InstallTab = 'CLI' | 'curl'
 
+const ANIMATIONS = [
+  { key: 'idle',       label: 'Idle' },
+  { key: 'run-right',  label: 'Run right' },
+  { key: 'run-left',   label: 'Run left' },
+  { key: 'waving',     label: 'Waving' },
+  { key: 'jumping',    label: 'Jumping' },
+  { key: 'failed',     label: 'Failed' },
+  { key: 'waiting',    label: 'Waiting' },
+  { key: 'running',    label: 'Running' },
+]
+
 export default function PetDetailClient({ id }: Props) {
   const router = useRouter()
   const getPetById = usePetsStore((s) => s.getPetById)
@@ -24,6 +35,7 @@ export default function PetDetailClient({ id }: Props) {
   const [copiedCmd, setCopiedCmd] = useState(false)
   const [hydrated, setHydrated] = useState(false)
   const [installTab, setInstallTab] = useState<InstallTab>('CLI')
+  const [activeAnim, setActiveAnim] = useState('idle')
 
   useEffect(() => {
     setHydrated(true)
@@ -202,6 +214,34 @@ export default function PetDetailClient({ id }: Props) {
           </svg>
           {liked ? 'Liked!' : `Like · ${pet.likes}`}
         </button>
+
+        {/* Animations */}
+        <div className="rounded-lg border border-pampas-dark bg-white p-5">
+          <h2 className="font-heading text-lg font-semibold text-gray-800 mb-4">Animations</h2>
+          <div className="grid grid-cols-2 gap-3">
+            {ANIMATIONS.map((anim) => {
+              const isActive = activeAnim === anim.key
+              return (
+                <button
+                  key={anim.key}
+                  onClick={() => setActiveAnim(anim.key)}
+                  className={`flex flex-col rounded-lg border overflow-hidden text-left transition-colors ${
+                    isActive
+                      ? 'border-gray-900 ring-1 ring-gray-900'
+                      : 'border-pampas-dark hover:border-cloudy'
+                  }`}
+                >
+                  <div className={`flex items-center justify-center py-6 ${isActive ? 'bg-pampas' : 'bg-white'}`}>
+                    <PetSprite pet={{ ...pet, animationType: anim.key === 'idle' ? 'idle' : anim.key === 'running' || anim.key === 'run-right' || anim.key === 'run-left' ? 'walk' : 'bounce' }} scale={3} />
+                  </div>
+                  <div className="px-3 py-2 border-t border-pampas-dark bg-white">
+                    <span className="font-mono text-xs text-gray-500">{anim.label}</span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
