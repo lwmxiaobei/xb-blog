@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -39,22 +40,48 @@ export default function AppHeader() {
               {link.label}
             </Link>
           ))}
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium px-4 py-1.5 rounded-full border border-crail text-crail hover:bg-crail hover:text-white transition-colors">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
         </nav>
 
-        {/* Mobile menu button */}
-        <button
-          className="sm:hidden p-2 rounded text-gray-600 hover:text-crail"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {open ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+        {/* Mobile right: auth + hamburger */}
+        <div className="sm:hidden flex items-center gap-3">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium px-3 py-1 rounded-full border border-crail text-crail hover:bg-crail hover:text-white transition-colors">
+                Sign in
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+
+          <button
+            className="p-2 rounded text-gray-600 hover:text-crail"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {open ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile nav */}
