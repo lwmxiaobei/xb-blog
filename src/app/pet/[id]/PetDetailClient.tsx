@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePetsStore } from '@/store/pets'
+import { useFavoritesStore } from '@/store/favorites'
 import { type Pet } from '@/data/seedPets'
 import PetSprite from '@/components/pets/PetSprite'
 import PetBadge from '@/components/pets/PetBadge'
+import FavoriteButton from '@/components/pets/FavoriteButton'
 import Link from 'next/link'
 
 interface Props {
@@ -24,6 +26,47 @@ const ANIMATIONS = [
   { key: 'waiting',    label: 'Waiting' },
   { key: 'running',    label: 'Running' },
 ]
+
+function FavoriteButtonDetail({ petId }: { petId: string }) {
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
+  const isFavorite = useFavoritesStore((s) => s.isFavorite)
+  const [favorited, setFavorited] = useState(false)
+  const [hydrated, setHydrated] = useState(false)
+
+  useEffect(() => {
+    setHydrated(true)
+    setFavorited(isFavorite(petId))
+  }, [petId, isFavorite])
+
+  function handleClick() {
+    toggleFavorite(petId)
+    setFavorited((prev) => !prev)
+  }
+
+  if (!hydrated) return null
+
+  return (
+    <button
+      onClick={handleClick}
+      className={`flex items-center justify-center gap-2 py-3 px-5 rounded-lg border text-sm font-medium transition-colors ${
+        favorited
+          ? 'bg-crail/10 border-crail text-crail'
+          : 'border-pampas-dark bg-white text-gray-600 hover:border-crail hover:text-crail'
+      }`}
+    >
+      <svg
+        className="w-4 h-4"
+        fill={favorited ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+      </svg>
+      {favorited ? 'Saved' : 'Save'}
+    </button>
+  )
+}
 
 export default function PetDetailClient({ id }: Props) {
   const router = useRouter()
@@ -193,27 +236,31 @@ export default function PetDetailClient({ id }: Props) {
           ))}
         </div>
 
-        {/* Like */}
-        <button
-          onClick={handleLike}
-          disabled={liked}
-          className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-colors ${
-            liked
-              ? 'bg-red-50 border-red-200 text-red-500 cursor-default'
-              : 'border-pampas-dark bg-white text-gray-600 hover:border-crail hover:text-crail'
-          }`}
-        >
-          <svg
-            className="w-4 h-4"
-            fill={liked ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        {/* Like + Favorite */}
+        <div className="flex gap-3">
+          <button
+            onClick={handleLike}
+            disabled={liked}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-colors ${
+              liked
+                ? 'bg-red-50 border-red-200 text-red-500 cursor-default'
+                : 'border-pampas-dark bg-white text-gray-600 hover:border-crail hover:text-crail'
+            }`}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-          {liked ? 'Liked!' : `Like · ${pet.likes}`}
-        </button>
+            <svg
+              className="w-4 h-4"
+              fill={liked ? 'currentColor' : 'none'}
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            {liked ? 'Liked!' : `Like · ${pet.likes}`}
+          </button>
+
+          <FavoriteButtonDetail petId={pet.id} />
+        </div>
 
         {/* Animations */}
         <div className="rounded-lg border border-pampas-dark bg-white p-5">

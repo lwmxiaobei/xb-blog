@@ -11,6 +11,10 @@ const navLinks = [
   { href: '/share', label: 'Share a Pet' },
 ]
 
+const authNavLinks = [
+  { href: '/favorites', label: 'Favorites' },
+]
+
 export default function AppHeader() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
@@ -40,6 +44,22 @@ export default function AppHeader() {
               {link.label}
             </Link>
           ))}
+
+          <SignedIn>
+            {authNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  pathname === link.href
+                    ? 'text-crail border-b-2 border-crail pb-0.5'
+                    : 'text-gray-600 hover:text-crail'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </SignedIn>
 
           <SignedOut>
             <SignInButton mode="modal">
@@ -99,6 +119,20 @@ export default function AppHeader() {
               {link.label}
             </Link>
           ))}
+          <SignedIn>
+            {authNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`text-sm font-medium ${
+                  pathname === link.href ? 'text-crail' : 'text-gray-600'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </SignedIn>
         </nav>
       )}
     </header>

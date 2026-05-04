@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { type Pet } from '@/data/seedPets'
 import PetSprite from './PetSprite'
 import PetBadge from './PetBadge'
+import FavoriteButton from './FavoriteButton'
 
 interface Props {
   pet: Pet
@@ -11,8 +12,11 @@ export default function PetCard({ pet }: Props) {
   return (
     <Link href={`/pet/${pet.id}`}>
       <article className="bg-white rounded-lg shadow-card hover:shadow-card-hover transition-shadow cursor-pointer h-full flex flex-col overflow-hidden">
-        <div className="bg-pampas flex items-center justify-center h-28 overflow-hidden">
+        <div className="bg-pampas flex items-center justify-center h-28 overflow-hidden relative">
           <PetSprite pet={pet} scale={3} />
+          <div className="absolute top-2 right-2">
+            <FavoriteButton petId={pet.id} size="sm" />
+          </div>
         </div>
         <div className="p-4 flex flex-col flex-1 gap-2">
           <h3 className="font-heading text-base font-semibold text-gray-800 leading-tight">{pet.name}</h3>
