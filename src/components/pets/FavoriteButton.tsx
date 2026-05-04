@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
 import { hasFavoritedPet, toggleFavoriteDB } from '@/lib/petsApi'
 import { getOrCreateDeviceId } from '@/lib/deviceId'
 
@@ -22,7 +22,7 @@ export default function FavoriteButton({ petId, size = 'md', className = '' }: P
     })
   }, [petId])
 
-  async function handleClick(e: MouseEvent) {
+  async function handleClick(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     e.stopPropagation()
     const deviceId = getOrCreateDeviceId()
