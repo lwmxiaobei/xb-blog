@@ -97,12 +97,30 @@ export async function insertPet(pet: Pet): Promise<Pet> {
 export async function incrementLikes(id: string): Promise<void> {
   const { error } = await supabase.rpc('increment_pet_likes', { pet_id: id })
   if (error) {
-    // fallback: fetch current likes and update
     const { data } = await supabase.from('pets').select('likes').eq('id', id).single()
     if (data) {
       await supabase.from('pets').update({ likes: data.likes + 1 }).eq('id', id)
     }
   }
+}
+
+export async function hasLikedPet(petId: string, deviceId: string): Promise<boolean> {
+  const { data } = await supabase
+    .from('pet_likes')
+    .select('id')
+    .eq('pet_id', petId)
+    .eq('device_id', deviceId)
+    .maybeSingle()
+  return data !== null
+}
+
+export async function likePetWithDevice(petId: string, deviceId: string): Promise<boolean> {
+  const { data, error } = await supabase.rpc('like_pet', {
+    p_pet_id: petId,
+    p_device_id: deviceId,
+  })
+  if (error) return false
+  return data as boolean
 }
 
 export async function incrementViews(id: string): Promise<void> {

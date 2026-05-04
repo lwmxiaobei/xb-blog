@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePetsStore } from '@/store/pets'
 import { useFavoritesStore } from '@/store/favorites'
-import { useLikesStore } from '@/store/likes'
+import { hasLikedPet, likePetWithDevice } from '@/lib/petsApi'
 import { type Pet } from '@/data/seedPets'
 import PetSprite from '@/components/pets/PetSprite'
 import PetBadge from '@/components/pets/PetBadge'
@@ -69,27 +69,38 @@ function FavoriteButtonDetail({ petId }: { petId: string }) {
   )
 }
 
+function getOrCreateDeviceId(): string {
+  const key = 'codex-device-id'
+  let id = localStorage.getItem(key)
+  if (!id) {
+    id = crypto.randomUUID()
+    localStorage.setItem(key, id)
+  }
+  return id
+}
+
 export default function PetDetailClient({ id }: Props) {
   const router = useRouter()
   const getPetById = usePetsStore((s) => s.getPetById)
-  const likePet = usePetsStore((s) => s.likePet)
   const loadPets = usePetsStore((s) => s.loadPets)
 
-  const isLiked = useLikesStore((s) => s.isLiked)
-  const addLike = useLikesStore((s) => s.addLike)
-
   const [pet, setPet] = useState<Pet | undefined>(undefined)
+  const [liked, setLiked] = useState(false)
+  const [liking, setLiking] = useState(false)
   const [copiedCmd, setCopiedCmd] = useState(false)
   const [hydrated, setHydrated] = useState(false)
   const [installTab, setInstallTab] = useState<InstallTab>('CLI')
   const [activeAnim, setActiveAnim] = useState('idle')
 
   useEffect(() => {
-    loadPets().then(() => {
-      setHydrated(true)
+    loadPets().then(async () => {
       const found = getPetById(id)
-      if (!found) router.push('/browse')
-      else setPet(found)
+      if (!found) { router.push('/browse'); return }
+      setPet(found)
+      const deviceId = getOrCreateDeviceId()
+      const alreadyLiked = await hasLikedPet(found.id, deviceId)
+      setLiked(alreadyLiked)
+      setHydrated(true)
     })
   }, [id, getPetById, loadPets, router])
 
@@ -105,13 +116,19 @@ export default function PetDetailClient({ id }: Props) {
   const curlCommand = `curl -fsSL https://codex-pets.dev/install/${pet.importCode} | sh`
   const installCommand = installTab === 'CLI' ? cliCommand : curlCommand
 
-  const liked = pet ? isLiked(pet.id) : false
-
-  function handleLike() {
-    if (liked || !pet) return
-    addLike(pet.id)
-    likePet(pet.id)
-    setPet((prev) => prev ? { ...prev, likes: prev.likes + 1 } : prev)
+  async function handleLike() {
+    if (liked || liking || !pet) return
+    setLiking(true)
+    const deviceId = getOrCreateDeviceId()
+    const recorded = await likePetWithDevice(pet.id, deviceId)
+    if (recorded) {
+      setLiked(true)
+      setPet((prev) => prev ? { ...prev, likes: prev.likes + 1 } : prev)
+    } else {
+      // already liked from another tab or race condition
+      setLiked(true)
+    }
+    setLiking(false)
   }
 
   async function handleCopyCmd() {
@@ -248,7 +265,7 @@ export default function PetDetailClient({ id }: Props) {
         <div className="flex gap-3">
           <button
             onClick={handleLike}
-            disabled={liked}
+            disabled={liked || liking}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border text-sm font-medium transition-colors ${
               liked
                 ? 'bg-red-50 border-red-200 text-red-500 cursor-default'
@@ -264,7 +281,7 @@ export default function PetDetailClient({ id }: Props) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            {liked ? 'Liked!' : `Like · ${pet.likes}`}
+            {liked ? 'Liked!' : liking ? '…' : `Like · ${pet.likes}`}
           </button>
 
           <FavoriteButtonDetail petId={pet.id} />

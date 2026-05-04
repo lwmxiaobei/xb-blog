@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { type Pet, seedPets } from '@/data/seedPets'
-import { fetchAllPets, fetchPetById, insertPet, incrementLikes, seedPetsIfEmpty } from '@/lib/petsApi'
+import { fetchAllPets, insertPet, seedPetsIfEmpty } from '@/lib/petsApi'
 
 interface PetsState {
   pets: Pet[]
@@ -10,7 +10,6 @@ interface PetsState {
   initialized: boolean
   loadPets: () => Promise<void>
   addPet: (data: Omit<Pet, 'id' | 'createdAt' | 'featured' | 'views' | 'likes'>) => Promise<Pet>
-  likePet: (id: string) => Promise<void>
   getPetById: (id: string) => Pet | undefined
 }
 
@@ -47,10 +46,5 @@ export const usePetsStore = create<PetsState>()((set, get) => ({
     return saved
   },
 
-  likePet: async (id) => {
-    set((state) => ({
-      pets: state.pets.map((p) => (p.id === id ? { ...p, likes: p.likes + 1 } : p)),
-    }))
-    await incrementLikes(id)
-  },
+
 }))
