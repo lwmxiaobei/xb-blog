@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePetsStore } from '@/store/pets'
 import { useFavoritesStore } from '@/store/favorites'
+import { useLikesStore } from '@/store/likes'
 import { type Pet } from '@/data/seedPets'
 import PetSprite from '@/components/pets/PetSprite'
 import PetBadge from '@/components/pets/PetBadge'
@@ -74,8 +75,10 @@ export default function PetDetailClient({ id }: Props) {
   const likePet = usePetsStore((s) => s.likePet)
   const loadPets = usePetsStore((s) => s.loadPets)
 
+  const isLiked = useLikesStore((s) => s.isLiked)
+  const addLike = useLikesStore((s) => s.addLike)
+
   const [pet, setPet] = useState<Pet | undefined>(undefined)
-  const [liked, setLiked] = useState(false)
   const [copiedCmd, setCopiedCmd] = useState(false)
   const [hydrated, setHydrated] = useState(false)
   const [installTab, setInstallTab] = useState<InstallTab>('CLI')
@@ -102,10 +105,12 @@ export default function PetDetailClient({ id }: Props) {
   const curlCommand = `curl -fsSL https://codex-pets.dev/install/${pet.importCode} | sh`
   const installCommand = installTab === 'CLI' ? cliCommand : curlCommand
 
+  const liked = pet ? isLiked(pet.id) : false
+
   function handleLike() {
     if (liked || !pet) return
+    addLike(pet.id)
     likePet(pet.id)
-    setLiked(true)
     setPet((prev) => prev ? { ...prev, likes: prev.likes + 1 } : prev)
   }
 
