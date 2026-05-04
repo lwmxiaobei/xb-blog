@@ -1,12 +1,23 @@
 import Link from 'next/link'
 import { seedPets } from '@/data/seedPets'
+import { fetchAllPets } from '@/lib/petsApi'
 import PetGrid from '@/components/pets/PetGrid'
 import PetSprite from '@/components/pets/PetSprite'
 import BaseButton from '@/components/ui/BaseButton'
 
-export default function HomePage() {
-  const featuredPets = seedPets.filter((p) => p.featured)
-  const marqueeItems = [...seedPets, ...seedPets] // duplicate for seamless loop
+export const revalidate = 60
+
+export default async function HomePage() {
+  let allPets = seedPets
+  try {
+    const fetched = await fetchAllPets()
+    if (fetched.length > 0) allPets = fetched
+  } catch {
+    // fallback to seedPets if Supabase is unavailable
+  }
+
+  const featuredPets = allPets.filter((p) => p.featured)
+  const marqueeItems = [...allPets.slice(0, 20), ...allPets.slice(0, 20)]
 
   return (
     <div>
@@ -65,7 +76,7 @@ export default function HomePage() {
       <section className="bg-white border-y border-pampas-dark">
         <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-3 gap-6 text-center">
           <div>
-            <p className="font-heading text-3xl font-bold text-crail">{seedPets.length}+</p>
+            <p className="font-heading text-3xl font-bold text-crail">{allPets.length}+</p>
             <p className="text-sm text-cloudy mt-1">Companions</p>
           </div>
           <div>

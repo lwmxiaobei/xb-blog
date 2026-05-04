@@ -72,6 +72,7 @@ export default function PetDetailClient({ id }: Props) {
   const router = useRouter()
   const getPetById = usePetsStore((s) => s.getPetById)
   const likePet = usePetsStore((s) => s.likePet)
+  const loadPets = usePetsStore((s) => s.loadPets)
 
   const [pet, setPet] = useState<Pet | undefined>(undefined)
   const [liked, setLiked] = useState(false)
@@ -81,11 +82,13 @@ export default function PetDetailClient({ id }: Props) {
   const [activeAnim, setActiveAnim] = useState('idle')
 
   useEffect(() => {
-    setHydrated(true)
-    const found = getPetById(id)
-    if (!found) router.push('/browse')
-    else setPet(found)
-  }, [id, getPetById, router])
+    loadPets().then(() => {
+      setHydrated(true)
+      const found = getPetById(id)
+      if (!found) router.push('/browse')
+      else setPet(found)
+    })
+  }, [id, getPetById, loadPets, router])
 
   if (!hydrated || !pet) {
     return (
