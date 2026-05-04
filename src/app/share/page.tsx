@@ -60,11 +60,11 @@ export default function SharePage() {
     return Object.keys(e).length === 0
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
 
-    addPet({
+    await addPet({
       name: form.name.trim(),
       description: form.description.trim(),
       category: form.category,

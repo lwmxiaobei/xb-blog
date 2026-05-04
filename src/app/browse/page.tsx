@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { usePetsStore } from '@/store/pets'
 import PetGrid from '@/components/pets/PetGrid'
 import SearchBar from '@/components/ui/SearchBar'
@@ -15,9 +15,13 @@ const sortOptions = [
 
 export default function BrowsePage() {
   const pets = usePetsStore((s) => s.pets)
+  const loading = usePetsStore((s) => s.loading)
+  const loadPets = usePetsStore((s) => s.loadPets)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('all')
   const [sortBy, setSortBy] = useState('newest')
+
+  useEffect(() => { loadPets() }, [loadPets])
 
   const filtered = useMemo(() => {
     let result = [...pets]
@@ -42,6 +46,14 @@ export default function BrowsePage() {
 
     return result
   }, [pets, query, category, sortBy])
+
+  if (loading && pets.length === 0) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <p className="text-cloudy">Loading companions…</p>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
