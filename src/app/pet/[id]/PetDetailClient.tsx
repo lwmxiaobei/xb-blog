@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePetsStore } from '@/store/pets'
-import { useFavoritesStore } from '@/store/favorites'
-import { hasLikedPet, likePetWithDevice } from '@/lib/petsApi'
+import { hasLikedPet, likePetWithDevice, hasFavoritedPet, toggleFavoriteDB } from '@/lib/petsApi'
+import { getOrCreateDeviceId } from '@/lib/deviceId'
 import { type Pet } from '@/data/seedPets'
 import PetSprite from '@/components/pets/PetSprite'
 import PetBadge from '@/components/pets/PetBadge'
@@ -29,19 +29,21 @@ const ANIMATIONS = [
 ]
 
 function FavoriteButtonDetail({ petId }: { petId: string }) {
-  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
-  const isFavorite = useFavoritesStore((s) => s.isFavorite)
   const [favorited, setFavorited] = useState(false)
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    setHydrated(true)
-    setFavorited(isFavorite(petId))
-  }, [petId, isFavorite])
+    const deviceId = getOrCreateDeviceId()
+    hasFavoritedPet(petId, deviceId).then((v) => {
+      setFavorited(v)
+      setHydrated(true)
+    })
+  }, [petId])
 
-  function handleClick() {
-    toggleFavorite(petId)
-    setFavorited((prev) => !prev)
+  async function handleClick() {
+    const deviceId = getOrCreateDeviceId()
+    const next = await toggleFavoriteDB(petId, deviceId)
+    setFavorited(next)
   }
 
   if (!hydrated) return null
@@ -67,16 +69,6 @@ function FavoriteButtonDetail({ petId }: { petId: string }) {
       {favorited ? 'Saved' : 'Save'}
     </button>
   )
-}
-
-function getOrCreateDeviceId(): string {
-  const key = 'codex-device-id'
-  let id = localStorage.getItem(key)
-  if (!id) {
-    id = crypto.randomUUID()
-    localStorage.setItem(key, id)
-  }
-  return id
 }
 
 export default function PetDetailClient({ id }: Props) {

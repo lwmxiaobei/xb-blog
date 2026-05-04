@@ -123,6 +123,40 @@ export async function likePetWithDevice(petId: string, deviceId: string): Promis
   return data as boolean
 }
 
+export async function getFavoriteIds(deviceId: string): Promise<string[]> {
+  const { data } = await supabase
+    .from('pet_favorites')
+    .select('pet_id')
+    .eq('device_id', deviceId)
+  return (data ?? []).map((row: { pet_id: string }) => row.pet_id)
+}
+
+export async function hasFavoritedPet(petId: string, deviceId: string): Promise<boolean> {
+  const { data } = await supabase
+    .from('pet_favorites')
+    .select('id')
+    .eq('pet_id', petId)
+    .eq('device_id', deviceId)
+    .maybeSingle()
+  return data !== null
+}
+
+// Returns the new favorited state (true = added, false = removed)
+export async function toggleFavoriteDB(petId: string, deviceId: string): Promise<boolean> {
+  const already = await hasFavoritedPet(petId, deviceId)
+  if (already) {
+    await supabase
+      .from('pet_favorites')
+      .delete()
+      .eq('pet_id', petId)
+      .eq('device_id', deviceId)
+    return false
+  } else {
+    await supabase.from('pet_favorites').insert({ pet_id: petId, device_id: deviceId })
+    return true
+  }
+}
+
 export async function incrementViews(id: string): Promise<void> {
   const { data } = await supabase.from('pets').select('views').eq('id', id).single()
   if (data) {

@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useFavoritesStore } from '@/store/favorites'
+import { hasFavoritedPet, toggleFavoriteDB } from '@/lib/petsApi'
+import { getOrCreateDeviceId } from '@/lib/deviceId'
 
 interface Props {
   petId: string
@@ -10,21 +11,23 @@ interface Props {
 }
 
 export default function FavoriteButton({ petId, size = 'md', className = '' }: Props) {
-  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite)
-  const isFavorite = useFavoritesStore((s) => s.isFavorite)
-  const [hydrated, setHydrated] = useState(false)
   const [favorited, setFavorited] = useState(false)
+  const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
-    setHydrated(true)
-    setFavorited(isFavorite(petId))
-  }, [petId, isFavorite])
+    const deviceId = getOrCreateDeviceId()
+    hasFavoritedPet(petId, deviceId).then((v) => {
+      setFavorited(v)
+      setHydrated(true)
+    })
+  }, [petId])
 
-  function handleClick(e: React.MouseEvent) {
+  async function handleClick(e: MouseEvent) {
     e.preventDefault()
     e.stopPropagation()
-    toggleFavorite(petId)
-    setFavorited((prev) => !prev)
+    const deviceId = getOrCreateDeviceId()
+    const next = await toggleFavoriteDB(petId, deviceId)
+    setFavorited(next)
   }
 
   if (!hydrated) return null

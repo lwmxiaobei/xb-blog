@@ -1,29 +1,30 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useFavoritesStore } from '@/store/favorites'
 import { usePetsStore } from '@/store/pets'
+import { getFavoriteIds } from '@/lib/petsApi'
+import { getOrCreateDeviceId } from '@/lib/deviceId'
 import { type Pet } from '@/data/seedPets'
 import PetGrid from '@/components/pets/PetGrid'
 import Link from 'next/link'
 
 export default function FavoritesPage() {
-  const favorites = useFavoritesStore((s) => s.favorites)
   const getPetById = usePetsStore((s) => s.getPetById)
+  const loadPets = usePetsStore((s) => s.loadPets)
   const [hydrated, setHydrated] = useState(false)
   const [favoritedPets, setFavoritedPets] = useState<Pet[]>([])
 
   useEffect(() => {
-    setHydrated(true)
-  }, [])
-
-  useEffect(() => {
-    if (!hydrated) return
-    const pets = favorites
-      .map((id) => getPetById(id))
-      .filter((p): p is Pet => p !== undefined)
-    setFavoritedPets(pets)
-  }, [hydrated, favorites, getPetById])
+    const deviceId = getOrCreateDeviceId()
+    loadPets().then(async () => {
+      const ids = await getFavoriteIds(deviceId)
+      const pets = ids
+        .map((id) => getPetById(id))
+        .filter((p): p is Pet => p !== undefined)
+      setFavoritedPets(pets)
+      setHydrated(true)
+    })
+  }, [loadPets, getPetById])
 
   if (!hydrated) {
     return (
